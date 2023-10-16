@@ -1,4 +1,4 @@
-package model;
+package co.edu.uniquindio.tienda.model;
 
 public enum TipoCosmetico {
     MAQUILLAJE,
