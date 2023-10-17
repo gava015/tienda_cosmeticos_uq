@@ -2,14 +2,10 @@ package co.edu.uniquindio.tienda.model;
 
 public class Vendedor {
     private String nombre;
-
     private String Apellido;
     private String cedula;
     private int edad;
-
     private Tienda ownedByTienda;
-
-
 
     public Vendedor(String nombre,String cedula,int edad) {
         this.nombre = nombre;
@@ -49,7 +45,6 @@ public class Vendedor {
         this.edad = edad;
     }
 
-
     public Tienda getOwnedByTienda() {
         return ownedByTienda;
     }
@@ -60,7 +55,6 @@ public class Vendedor {
     public void setOwnedByPrestamoUq(Tienda ownedByPrestamoUq) {
         this.ownedByTienda = ownedByTienda;
     }
-
 
     @Override
     public String toString() {

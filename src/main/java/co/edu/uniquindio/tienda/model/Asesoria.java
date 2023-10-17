@@ -3,7 +3,7 @@ package co.edu.uniquindio.tienda.model;
 import java.util.List;
 
 public class Asesoria {
-    private String tipoAsesoria;
+    private TipoCosmetico tipoAsesoria;
     private String fechaAsesoria;
     private Vendedor vendedor;
     private Cliente cliente;
@@ -13,7 +13,10 @@ public class Asesoria {
 
     private Tienda ownedByTienda;
 
-    public Asesoria(String tipoAsesoria, String fechaAsesoria, Vendedor vendedor,Cliente cliente, int codigo) {
+    public Asesoria() {
+    }
+
+    public Asesoria(TipoCosmetico tipoAsesoria, String fechaAsesoria, Vendedor vendedor, Cliente cliente, int codigo) {
         this.tipoAsesoria = tipoAsesoria;
         this.fechaAsesoria = fechaAsesoria;
         this.cliente = cliente;
@@ -21,11 +24,11 @@ public class Asesoria {
         this.codigo = codigo;
     }
 
-    public String getTipoAsesoria() {
+    public TipoCosmetico getTipoAsesoria() {
         return tipoAsesoria;
     }
 
-    public void setTipoAsesoria(String tipoAsesoria) {
+    public void setTipoAsesoria(TipoCosmetico tipoAsesoria) {
         this.tipoAsesoria = tipoAsesoria;
     }
 
@@ -79,11 +82,18 @@ public class Asesoria {
 
     @Override
     public String toString() {
-        return "Asesoria{" +
+        String mensaje = "Asesoria{" +
                 "tipoAsesoria='" + tipoAsesoria + '\'' +
                 ", fechaAsesoria='" + fechaAsesoria + '\'' +
                 ", vendedor=" + vendedor +
                 ", cliente=" + cliente +
                 '}';
+
+        for (int i = 0; i < getProductos().size(); i++){
+            Producto producto = getProductos().get(i);
+            mensaje += "Productos{"+ producto.toString();
+        }
+
+        return mensaje;
     }
 }

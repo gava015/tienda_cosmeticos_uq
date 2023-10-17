@@ -4,7 +4,6 @@ public class Cliente {
     private String nombre;
     private String apellido;
     private String cedula;
-
     private Tienda ownedByTienda;
 
     public Cliente() {

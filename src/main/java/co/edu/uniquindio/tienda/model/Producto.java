@@ -11,7 +11,7 @@ public class Producto {
 
     private int codigo;
 
-    private Tienda ownedByTienda;
+    private Proveedor ownedByProveedor;
 
     public Producto() {
     }
@@ -72,12 +72,12 @@ public class Producto {
         this.codigo = codigo;
     }
 
-    public Tienda getOwnedByTienda() {
-        return ownedByTienda;
+    public Proveedor getOwnedByProvedor() {
+        return ownedByProveedor;
     }
 
-    public void setOwnedByTienda(Tienda ownedByTienda) {
-        this.ownedByTienda = ownedByTienda;
+    public void setOwnedByProveedor(Proveedor ownedByProvedor) {
+        this.ownedByProveedor = ownedByProvedor;
     }
 
     /*Metodo para contar la cantidad de productos vendidos
