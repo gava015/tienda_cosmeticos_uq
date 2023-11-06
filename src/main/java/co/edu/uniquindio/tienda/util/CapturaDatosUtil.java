@@ -31,7 +31,6 @@ public class CapturaDatosUtil {
      * @param mensaje El mensaje que verá el usuario
      * @return el numero ingresado por el usuario
      */
-
     public static double leerDouble (String mensaje)
     {
         double dato= Double.parseDouble(JOptionPane.showInputDialog(mensaje));

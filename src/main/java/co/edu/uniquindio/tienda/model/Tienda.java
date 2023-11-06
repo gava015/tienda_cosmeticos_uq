@@ -1,5 +1,8 @@
 package co.edu.uniquindio.tienda.model;
 
+import co.edu.uniquindio.tienda.modelDto.ClienteDto;
+import co.edu.uniquindio.tienda.modelDto.VendedorDto;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,11 +101,10 @@ public class Tienda {
     /**
      * Crear cliente
      */
-    public Cliente crearCliente(String nombre, String apellido, String cedula) {
-        Cliente cliente = new Cliente();
-        cliente.setNombre(nombre);
-        cliente.setApellido(apellido);
-        cliente.setCedula(cedula);
+    public Cliente crearCliente(ClienteDto personaDto) {
+        Cliente cliente = new Cliente(personaDto.nombre(),personaDto.apellido(),
+                personaDto.cedula(),personaDto.edad());
+
         getListaClientes().add(cliente);
 
         return cliente;
@@ -111,14 +113,15 @@ public class Tienda {
     /**
      * Actualizar cliente
      */
-    public void actualizarCliente(String nombre, String apellido, String cedula) {
+    public void actualizarCliente(ClienteDto personaDto) {
         int tamanioLista = getListaClientes().size();
         for (int i = 0; i < tamanioLista; i++) {
             Cliente cliente = getListaClientes().get(i);
-            if (cliente.getCedula().equalsIgnoreCase(cedula)) {
-                cliente.setNombre(nombre);
-                cliente.setApellido(apellido);
-                cliente.setCedula(cedula);
+            if (cliente.getCedula().equalsIgnoreCase(personaDto.cedula())) {
+                cliente.setNombre(personaDto.nombre());
+                cliente.setApellido(personaDto.apellido());
+                cliente.setCedula(personaDto.cedula());
+                cliente.setEdad(personaDto.edad());
                 getListaClientes().add(i, cliente);
             }
         }
@@ -158,8 +161,9 @@ public class Tienda {
     /**
      * Crear vendedor
      */
-    public Vendedor crearVendedor(String nombreCompleto, String cedula, int edad) {
-        Vendedor vendedor = new Vendedor(nombreCompleto, cedula, edad);
+    public Vendedor crearVendedor(VendedorDto vendedorDto) {
+        Vendedor vendedor = new Vendedor(vendedorDto.nombre(),vendedorDto.apellido(),
+               vendedorDto.cedula(), vendedorDto.edad());
         vendedor.setOwnedByTienda(this);
         getListaVendedores().add(vendedor);
         return vendedor;
@@ -168,14 +172,14 @@ public class Tienda {
     /**
      * Actualizar vendedor
      */
-    public void actualizarEmpleado(String nombre, String cedula, int edad) {
+    public void actualizarVendedor(VendedorDto vendedorDto) {
         int tamanioLista = getListaVendedores().size();
         for (int i = 0; i < tamanioLista; i++) {
             Vendedor vendedor = getListaVendedores().get(i);
-            if (vendedor.getCedula().equalsIgnoreCase(cedula)) {
-                vendedor.setNombre(nombre);
-                vendedor.setEdad(edad);
-                vendedor.setCedula(cedula);
+            if (vendedor.getCedula().equalsIgnoreCase(vendedorDto.cedula())) {
+                vendedor.setNombre(vendedorDto.nombre());
+                vendedor.setEdad(vendedorDto.edad());
+                vendedor.setCedula(vendedorDto.cedula());
                 getListaVendedores().add(i, vendedor);
             }
         }

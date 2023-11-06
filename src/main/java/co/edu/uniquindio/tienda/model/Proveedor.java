@@ -1,12 +1,13 @@
 package co.edu.uniquindio.tienda.model;
 
+import co.edu.uniquindio.tienda.modelDto.ProductoDto;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Proveedor {
-
-    private String nombreProveedor;
     private int codigo;
+    private String nombreProveedor;
     List<Producto> listaProductos = new ArrayList<>();
 
     public Proveedor() {
@@ -54,15 +55,15 @@ public class Proveedor {
     /**
      * Actualizar
      */
-    public void actualizarProducto(String nombre, TipoCosmetico clasificación, double precio, int inventario, int codigo) {
+    public void actualizarProducto(ProductoDto productoDto) {
         int tamanioLista = getListaProductos().size();
         for (int i = 0; i < tamanioLista; i++) {
             Producto producto = getListaProductos().get(i);
             if (producto.getCodigo() == (codigo)) {
-                producto.setNombre(nombre);
-                producto.setClasificacion(clasificación);
-                producto.setPrecio(precio);
-                producto.setInventario(inventario);
+                producto.setNombre(productoDto.nombre());
+                producto.setClasificacion(productoDto.clasificacion());
+                producto.setPrecio(productoDto.precio());
+                producto.setInventario(productoDto.inventario());
                 producto.setCodigo(codigo);
 
                 getListaProductos().add(i, producto);
@@ -71,10 +72,11 @@ public class Proveedor {
     }
 
     /**
-     *
-     OBTENER
+     * Método que permite buscar un producto por código
+     * @param codigo
+     * @return
      */
-    public Producto obtenerProducto(int codigo) {
+    public Producto buscarProducto(int codigo) {
         int tamanioLista = getListaProductos().size();
         for(int i=0; i <tamanioLista; i++){
             Producto producto = getListaProductos().get(i);
@@ -87,7 +89,8 @@ public class Proveedor {
     }
 
     /**
-     *Eliminar
+     *
+     * @param codigo
      */
     public void eliminarProducto(int codigo) {
         int tamanioLista = getListaProductos().size();

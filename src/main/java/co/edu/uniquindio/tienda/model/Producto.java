@@ -1,27 +1,23 @@
 package co.edu.uniquindio.tienda.model;
 
 public class Producto {
+    private int codigo;
     private String nombre;
     private double precio;
-    private TipoCosmetico clasificacion;
-
     private int inventario;
-
-    private int inventarioVendido ;
-
-    private int codigo;
-
+    private int inventarioVendido;
+    private TipoCosmetico clasificacion;
     private Proveedor ownedByProveedor;
 
     public Producto() {
     }
 
-    public Producto(String nombre, TipoCosmetico clasificación, double precio, int inventario, int codigo) {
+    public Producto(String nombre, TipoCosmetico clasificacion, double precio, int inventario, int codigo) {
         this.nombre = nombre;
-        this.clasificacion = clasificación;
+        this.clasificacion = clasificacion;
         this.precio = precio;
         this.inventario = inventario;
-        this.codigo= codigo;
+        this.codigo = codigo;
     }
 
     public String getNombre() {
@@ -87,9 +83,9 @@ public class Producto {
         this.inventarioVendido += 1;
     }
 
-    public double totalProductoVendido (){
-         double calcularTotalInventarioVendido = this.inventarioVendido * this.precio;
-         return calcularTotalInventarioVendido;
+    public double totalProductoVendido() {
+        double calcularTotalInventarioVendido = this.inventarioVendido * this.precio;
+        return calcularTotalInventarioVendido;
     }
 
     @Override

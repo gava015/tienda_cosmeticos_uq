@@ -3,13 +3,12 @@ package co.edu.uniquindio.tienda.model;
 import java.util.List;
 
 public class Asesoria {
-    private TipoCosmetico tipoAsesoria;
+    private int codigo;
     private String fechaAsesoria;
     private Vendedor vendedor;
     private Cliente cliente;
     private  List<Producto> Productos;
-
-    private int codigo;
+    private TipoCosmetico tipoAsesoria;
 
     private Tienda ownedByTienda;
 
