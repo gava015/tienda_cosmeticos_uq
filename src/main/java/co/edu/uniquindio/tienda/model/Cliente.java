@@ -8,4 +8,14 @@ public class Cliente extends Persona {
     public Cliente(String nombre, String apellido, String cedula, int edad) {
         super(nombre, apellido, cedula, edad);
     }
+
+    /**
+     * Método que permite obtener la información del nombre completo
+     *
+     * @return
+     */
+    @Override
+    public String obtenerNombreCompleto() {
+        return nombre + " " + apellido;
+    }
 }

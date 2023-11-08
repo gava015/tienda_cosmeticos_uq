@@ -4,43 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompraInventario {
-    private String codigo;
-    private String fechaInventario;
-    private  Proveedor Provedor;
+    private Producto producto;
     private Tienda tienda;
+    private  Proveedor proveedor;
+    private int cantidad;
     private List <Producto> listaProductos = new ArrayList<>();
 
     public CompraInventario() {
     }
 
-    public CompraInventario(String fechaInventario, Proveedor provedor, Tienda tienda) {
-        this.fechaInventario = fechaInventario;
-        Provedor = provedor;
+    public CompraInventario(Producto producto, Tienda tienda, Proveedor proveedor, int cantidad) {
+        this.producto = producto;
         this.tienda = tienda;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getFechaInventario() {
-        return fechaInventario;
-    }
-
-    public void setFechaInventario(String fechaInventario) {
-        this.fechaInventario = fechaInventario;
-    }
-
-    public Proveedor getProvedor() {
-        return Provedor;
-    }
-
-    public void setProvedor(Proveedor provedor) {
-        Provedor = provedor;
+        this.proveedor = proveedor;
+        this.cantidad = cantidad;
     }
 
     public Tienda getTienda() {
@@ -49,6 +26,22 @@ public class CompraInventario {
 
     public void setTienda(Tienda tienda) {
         this.tienda = tienda;
+    }
+
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    public void setProvedor(Proveedor proveedor) {
+        proveedor = proveedor;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public List<Producto> getListaProductos() {
@@ -62,10 +55,10 @@ public class CompraInventario {
     @Override
     public String toString() {
         return "CompraInventario{" +
-                "codigo'" + codigo + '\'' +
-                "fechaInventario='" + fechaInventario + '\'' +
-                ", Provedor=" + Provedor.getNombreProveedor() +
-                ", tienda=" + tienda.getNombreTienda() +
+                "tienda=" + tienda +
+                ", Provedor=" + proveedor +
+                ", cantidad=" + cantidad +
+                ", listaProductos=" + listaProductos +
                 '}';
     }
 }

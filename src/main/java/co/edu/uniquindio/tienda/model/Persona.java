@@ -1,14 +1,11 @@
 package co.edu.uniquindio.tienda.model;
 
-public class Persona {
+public abstract class Persona {
+    protected String cedula;
     protected String nombre;
     protected String apellido;
-    protected String cedula;
-
     protected int edad;
-
     protected Tienda ownedByTienda;
-
 
     public Persona() {
     }
@@ -59,6 +56,10 @@ public class Persona {
     public void setEdad(int edad) {
         this.edad = edad;
     }
+
+
+    public abstract String obtenerNombreCompleto();
+
 
     @Override
     public String toString() {

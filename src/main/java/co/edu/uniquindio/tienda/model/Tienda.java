@@ -1,23 +1,19 @@
 package co.edu.uniquindio.tienda.model;
 
-import co.edu.uniquindio.tienda.modelDto.ClienteDto;
-import co.edu.uniquindio.tienda.modelDto.VendedorDto;
+import co.edu.uniquindio.tienda.services.ITienda;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tienda {
+public class Tienda implements ITienda {
     private String nombreTienda;
     private String ubicacion;
     private String tipoTienda;
-
     List<Cliente> listaClientes = new ArrayList<>();
-
     List<Vendedor> listaVendedores = new ArrayList<>();
-
-    List<CompraInventario> listaInventario = new ArrayList<>();
-
     List<Asesoria> listaAsesorias = new ArrayList<>();
+    List<Producto> listaProductos = new ArrayList<>();
+    List<CompraInventario> listaInventario = new ArrayList<>();
 
     /**
      * Constructor Tienda
@@ -95,41 +91,82 @@ public class Tienda {
         this.listaAsesorias = listaAsesorias;
     }
 
+    public List<Producto> getListaProductos() {
+        return listaProductos;
+    }
 
-    /*CRUD CLIENTE*/
+    public void setListaProductos(List<Producto> listaProductos) {
+        this.listaProductos = listaProductos;
+    }
+
+    // =========================== CRUD Cliente ===========================
 
     /**
-     * Crear cliente
+     * Método que permite mostrar la información de los clientes relacionados a la tienda
+     *
+     * @return
      */
-    public Cliente crearCliente(ClienteDto personaDto) {
-        Cliente cliente = new Cliente(personaDto.nombre(),personaDto.apellido(),
-                personaDto.cedula(),personaDto.edad());
-
-        getListaClientes().add(cliente);
-
-        return cliente;
+    public String mostrarInformacionClientes() {
+        String infoClientes = "\n";
+        for (Cliente cliente : getListaClientes()) {
+            infoClientes += cliente.toString() + "\n";
+        }
+        return infoClientes;
     }
 
     /**
-     * Actualizar cliente
+     * Método que permite crear un cliente para la tienda
+     *
+     * @param nombre
+     * @param apellido
+     * @param cedula
+     * @param edad
+     * @return
      */
-    public void actualizarCliente(ClienteDto personaDto) {
-        int tamanioLista = getListaClientes().size();
-        for (int i = 0; i < tamanioLista; i++) {
-            Cliente cliente = getListaClientes().get(i);
-            if (cliente.getCedula().equalsIgnoreCase(personaDto.cedula())) {
-                cliente.setNombre(personaDto.nombre());
-                cliente.setApellido(personaDto.apellido());
-                cliente.setCedula(personaDto.cedula());
-                cliente.setEdad(personaDto.edad());
-                getListaClientes().add(i, cliente);
-            }
+    @Override
+    public boolean crearCliente(String nombre, String apellido, String cedula, int edad) {
+        Cliente cliente = obtenerCliente(cedula);
+        if (cliente == null) {
+            cliente = new Cliente(nombre, apellido, cedula, edad);
+            cliente.setOwnedByTienda(this);
+            getListaClientes().add(cliente);
+            return true;
+        } else {
+            return false;
         }
     }
 
     /**
-     * Obtener cliente
+     * Método que permite actualizar un cliente
+     *
+     * @param nombre
+     * @param apellido
+     * @param cedula
+     * @param edad
+     * @return
      */
+    @Override
+    public boolean actualizarCliente(String nombre, String apellido, String cedula, int edad) {
+        Cliente cliente = obtenerCliente(cedula);
+        if (cliente != null) {
+            cliente.setNombre(nombre);
+            cliente.setApellido(apellido);
+            cliente.setCedula(cedula);
+            cliente.setEdad(edad);
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método que permite obtener un cliente por su cédula
+     *
+     * @param cedula
+     * @return
+     */
+    @Override
     public Cliente obtenerCliente(String cedula) {
         int tamanioLista = getListaClientes().size();
         for (int i = 0; i < tamanioLista; i++) {
@@ -143,51 +180,92 @@ public class Tienda {
     }
 
     /**
-     * Eliminar cliente
+     * Método que permite eliminar un cliente por su cédula
+     *
+     * @param cedula
+     * @return
      */
-    public void eliminarCliente(String cedula) {
+    @Override
+    public boolean eliminarCliente(String cedula) {
         int tamanioLista = getListaClientes().size();
         for (int i = 0; i < tamanioLista; i++) {
             Cliente cliente = getListaClientes().get(i);
             if (cliente.getCedula().equalsIgnoreCase(cedula)) {
                 getListaClientes().remove(i);
-                break;
+                return true;
             }
+        }
+        return false;
+    }
+
+    // =========================== CRUD Vendedor ===========================
+
+    /**
+     * Método que permite obtener la información de los vendedores de la tienda
+     *
+     * @return
+     */
+    public String mostrarInformacionVendedores() {
+        String infoVendedores = "";
+        for (Vendedor vendedor : getListaVendedores()) {
+            infoVendedores += vendedor.toString() + "\n";
+        }
+        return infoVendedores;
+    }
+
+    /**
+     * Método que permite crear un vendedor para la tienda
+     *
+     * @param nombre
+     * @param apellido
+     * @param cedula
+     * @param edad
+     * @return
+     */
+    @Override
+    public boolean crearVendedor(String nombre, String apellido, String cedula, int edad) {
+        Vendedor vendedor = obtenerVendedor(cedula);
+        if (vendedor == null) {
+            vendedor = new Vendedor(nombre, apellido, cedula, edad);
+            vendedor.setOwnedByTienda(this);
+            getListaVendedores().add(vendedor);
+            return true;
+        } else {
+            return false;
         }
     }
 
-    /* CRUD VENDEDOR */
-
     /**
-     * Crear vendedor
+     * Método que permite actualizar un vendedor de la tienda
+     *
+     * @param nombre
+     * @param apellido
+     * @param cedula
+     * @param edad
+     * @return
      */
-    public Vendedor crearVendedor(VendedorDto vendedorDto) {
-        Vendedor vendedor = new Vendedor(vendedorDto.nombre(),vendedorDto.apellido(),
-               vendedorDto.cedula(), vendedorDto.edad());
-        vendedor.setOwnedByTienda(this);
-        getListaVendedores().add(vendedor);
-        return vendedor;
-    }
+    @Override
+    public boolean actualizarVendedor(String nombre, String apellido, String cedula, int edad) {
+        Vendedor vendedor = obtenerVendedor(cedula);
+        if (vendedor != null) {
+            vendedor.setNombre(nombre);
+            vendedor.setApellido(apellido);
+            vendedor.setCedula(cedula);
+            vendedor.setEdad(edad);
+            return true;
 
-    /**
-     * Actualizar vendedor
-     */
-    public void actualizarVendedor(VendedorDto vendedorDto) {
-        int tamanioLista = getListaVendedores().size();
-        for (int i = 0; i < tamanioLista; i++) {
-            Vendedor vendedor = getListaVendedores().get(i);
-            if (vendedor.getCedula().equalsIgnoreCase(vendedorDto.cedula())) {
-                vendedor.setNombre(vendedorDto.nombre());
-                vendedor.setEdad(vendedorDto.edad());
-                vendedor.setCedula(vendedorDto.cedula());
-                getListaVendedores().add(i, vendedor);
-            }
+        } else {
+            return false;
         }
     }
 
     /**
-     * Obtener vendedor
+     * Método que permite obtener un vendedor de la tienda por su cedula
+     *
+     * @param cedula
+     * @return
      */
+    @Override
     public Vendedor obtenerVendedor(String cedula) {
         int tamanioLista = getListaVendedores().size();
         for (int i = 0; i < tamanioLista; i++) {
@@ -200,137 +278,279 @@ public class Tienda {
     }
 
     /**
-     * Eliminar vendedor
+     * Método que permite eliminar un vendedor por su cédula
+     *
+     * @param cedula
+     * @return
      */
-    public void eliminarVendedor(String cedula) {
+    @Override
+    public boolean eliminarVendedor(String cedula) {
         int tamanioLista = getListaVendedores().size();
         for (int i = 0; i < tamanioLista; i++) {
             Vendedor vendedor = getListaVendedores().get(i);
             if (vendedor.getCedula().equalsIgnoreCase(cedula)) {
                 getListaVendedores().remove(i);
-                break;
+                return true;
             }
         }
-    }
-
-    /* CRUD ASESORIA */
-
-    /**
-     * Crear asesoría
-     */
-    public Asesoria crearAsesoria(TipoCosmetico tipoAsesoria, String fechaAsesoria, Vendedor vendedor, Cliente cliente, int codigo, List listaProductos) {
-        Asesoria asesoria = new Asesoria();
-        asesoria.setTipoAsesoria(tipoAsesoria);
-        asesoria.setFechaAsesoria(fechaAsesoria);
-        asesoria.setVendedor(vendedor);
-        asesoria.setCliente(cliente);
-        asesoria.setCodigo(codigo);
-        asesoria.setProductos(listaProductos);
-        getListaAsesorias().add(asesoria);
-
-        return asesoria;
+        return false;
     }
 
     /**
-     * Actualizar asesoría
-     */
-    public void actualizarAsesoria(TipoCosmetico tipoAsesoria, String fechaAsesoria, Vendedor vendedor, Cliente cliente, int codigo) {
-        int tamanioLista = getListaAsesorias().size();
-        for (int i = 0; i < tamanioLista; i++) {
-            Asesoria asesoria = getListaAsesorias().get(i);
-            if (asesoria.getCodigo() == (codigo)) {
-                asesoria.setTipoAsesoria(tipoAsesoria);
-                asesoria.setFechaAsesoria(fechaAsesoria);
-                asesoria.setVendedor(vendedor);
-                asesoria.setCliente(cliente);
-                asesoria.setCodigo(codigo);
-
-                getListaAsesorias().add(i, asesoria);
-            }
-        }
-    }
-
-    /**
-     * Obtener asesoría
+     * Método que permite buscar el vendedor con la mayor edad
      *
      * @return
      */
-    public Asesoria obtenerAsesorias(int codigo) {
-        int tamanioLista = getListaAsesorias().size();
-        for (int i = 0; i < tamanioLista; i++) {
-            Asesoria asesoria = getListaAsesorias().get(i);
-            if (asesoria.getCodigo() == (codigo)) {
-                return asesoria;
+    public Vendedor buscarVendedorMayorEdad() {
+        int tamanioLista = getListaVendedores().size();
+        Vendedor vendedorMayorEdad = getListaVendedores().get(0);
+        for (int i = 1; i < tamanioLista; i++) {
+            Vendedor vendedor = getListaVendedores().get(i);
+            if (vendedor.getEdad() > vendedorMayorEdad.getEdad()) {
+                vendedorMayorEdad = vendedor;
             }
         }
-        return null;
+        return vendedorMayorEdad;
+    }
+
+    // =========================== Transacción CRUD Asesoria ===========================
+
+    /**
+     * Método que permite crear una asesoría para la tienda
+     *
+     * @param codigo
+     * @param fecha
+     * @param codigoProducto
+     * @param cedulaCliente
+     * @param cedulaVendedor
+     * @param tipoAsesoria
+     * @return
+     */
+    @Override
+    public boolean crearAsesoria(String codigo, String fecha, String codigoProducto, String cedulaCliente, String cedulaVendedor,
+                                 String tipoAsesoria) {
+
+        Cliente cliente = obtenerCliente(cedulaCliente);
+        Vendedor vendedor = obtenerVendedor(cedulaVendedor);
+        Producto producto = obtenerProducto(codigoProducto);
+
+        if (cliente == null || vendedor == null || producto == null) {
+            return false;
+        }
+
+        Asesoria asesoria = new Asesoria();
+        asesoria.setCodigo(codigo);
+        asesoria.setFecha(fecha);
+        asesoria.setCliente(cliente);
+        asesoria.setVendedor(vendedor);
+        asesoria.setProducto(producto);
+        asesoria.crearTipoAsesoria(tipoAsesoria);
+
+        listaAsesorias.add(asesoria);
+        return true;
     }
 
     /**
-     * Eliminar asesoría
+     * Método que permite obtener una asesoría por su código
      *
      * @param codigo
+     * @return
      */
-    public void eliminarAsesoria(int codigo) {
-        int tamanioLista = getListaAsesorias().size();
-        for (int i = 0; i < tamanioLista; i++) {
-            Asesoria asesoria = getListaAsesorias().get(i);
-            if (asesoria.getCodigo() == (codigo)) {
-                getListaAsesorias().remove(i);
+    @Override
+    public Asesoria obtenerAsesoria(String codigo) {
+        Asesoria asesoriaEncontrada = null;
+        for (Asesoria asesoria : getListaAsesorias()) {
+            if (asesoria.getCodigo().equalsIgnoreCase(codigo)) {
+                asesoriaEncontrada = asesoria;
+            }
+        }
+        return asesoriaEncontrada;
+    }
+
+    /**
+     * Método que permite actualizar la información de una asesoría existente en la tienda
+     *
+     * @param codigo
+     * @param fecha
+     * @param codigoProducto
+     * @param tipoAsesoria
+     * @return
+     */
+    @Override
+    public boolean actualizarAsesoria(String codigo, String fecha, String codigoProducto, String tipoAsesoria) {
+        Asesoria asesoria = obtenerAsesoria(codigo);
+        if (asesoria != null) {
+            Producto producto = obtenerProducto(codigoProducto);
+
+            if (producto == null) {
+                return false;
+            }
+
+            asesoria.setFecha(fecha);
+            asesoria.setProducto(producto);
+            asesoria.crearTipoAsesoria(tipoAsesoria);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Método que permite eliminar una asesoría de la lista de asesorias de la tienda
+     *
+     * @param codigo
+     * @return
+     */
+    @Override
+    public boolean eliminarAsesoria(String codigo) {
+        boolean eliminado = false;
+        for (Asesoria asesoria : getListaAsesorias()) {
+            if (asesoria.getCodigo().equalsIgnoreCase(codigo)) {
+                getListaAsesorias().remove(asesoria);
+                eliminado = true;
+            }
+        }
+
+        return eliminado;
+    }
+
+    // =========================== Transacción CRUD Producto ===========================
+
+    /**
+     * Método que permite crear un producto para la tienda
+     *
+     * @param codigo
+     * @param nombre
+     * @param clasificacion
+     * @param precio
+     * @param inventario
+     * @param inventarioVendido
+     * @return
+     */
+    @Override
+    public boolean crearProducto(String codigo, String nombre, TipoCosmetico clasificacion, double precio,
+                                 int inventario, int inventarioVendido) {
+        Producto producto = obtenerProducto(codigo);
+        if (producto == null) {
+            producto = new Producto(codigo, nombre, clasificacion, precio, inventario, inventarioVendido);
+            getListaProductos().add(producto);
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método que permite actualizar la información de un producto existente en la tienda
+     *
+     * @param codigo
+     * @param nombre
+     * @param precio
+     * @param inventario
+     * @param inventarioVendido
+     * @return
+     */
+    @Override
+    public boolean actualizarProducto(String codigo, String nombre, double precio, int inventario, int inventarioVendido) {
+        Producto producto = obtenerProducto(codigo);
+        if (producto != null) {
+            producto.setNombre(nombre);
+            producto.setPrecio(precio);
+            producto.setInventario(inventario);
+            producto.setInventarioVendido(inventarioVendido);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método que permite obtener un producto ofrecido por la tienda por su codigo
+     *
+     * @param codigo
+     * @return
+     */
+    @Override
+    public Producto obtenerProducto(String codigo) {
+        Producto productoEncontrado = null;
+        for (Producto producto : getListaProductos()) {
+            if (producto.getCodigo().equalsIgnoreCase(codigo)) {
+                productoEncontrado = producto;
                 break;
             }
         }
-    }
 
-    public CompraInventario crearCompraInventario(String codigo, String fecha, Proveedor proveedor) {
-        CompraInventario nuevaCompraInventario = new CompraInventario();
-        nuevaCompraInventario.setTienda(this);
-        nuevaCompraInventario.setFechaInventario(fecha);
-        nuevaCompraInventario.setProvedor(proveedor);
-
-        return nuevaCompraInventario;
+        return productoEncontrado;
     }
 
     /**
-     * Método que permite realizar la compra de productos para el inventario de la tienda
+     * Método que permite eliminar un producto de la lista de productos de la tienda
      *
-     * @param proveedor
+     * @param codigo
+     * @return
      */
-    public void comprarProductosInventario(Proveedor proveedor) {
-        List<Producto> listaProductosOfrecidos = proveedor.ofrecerProductos();
-
-        CompraInventario nuevaCompraInventario = crearCompraInventario("123", "16-07-2023", proveedor);
-
-        for (int i = 0; i < listaProductosOfrecidos.size(); i++) {
-            Producto productoOfrecido = listaProductosOfrecidos.get(i);
-            agregarProductoCompradoAInventario(nuevaCompraInventario, productoOfrecido);
-            productoOfrecido.setInventarioVendido(productoOfrecido.getInventario());
-        }
-        listaInventario.add(nuevaCompraInventario);
-        proveedor.setListaProductos(listaProductosOfrecidos);
-    }
-
-    public void agregarProductoCompradoAInventario(CompraInventario compraInventario, Producto productoOfrecido) {
-        Producto productoComprado = new Producto();
-        productoComprado.setNombre(productoOfrecido.getNombre());
-        productoComprado.setCodigo(productoOfrecido.getCodigo());
-        productoComprado.setClasificacion(productoOfrecido.getClasificacion());
-        compraInventario.getListaProductos().add(productoComprado);
-    }
-
-    public List<Producto> obtenerProductos() {
-        List<Producto> productosALaVenta = new ArrayList<>();
-
-        for (int i = 0; i < listaInventario.size(); i++) {
-            CompraInventario compraInventario = listaInventario.get(i);
-            List<Producto> productos = compraInventario.getListaProductos();
-            for (int j = 0; j < productos.size(); j++) {
-                Producto productoComprado = productos.get(j);
-                productosALaVenta.add(productoComprado);
+    @Override
+    public boolean eliminarProducto(String codigo) {
+        boolean eliminado = false;
+        for (Producto producto : getListaProductos()) {
+            if (producto.getCodigo().equalsIgnoreCase(codigo)) {
+                eliminado = true;
             }
         }
 
-        return productosALaVenta;
+        return eliminado;
+    }
+
+    /**
+     * Método que permite obtener la información de todos los productos ofrecidos por la tienda
+     *
+     * @return
+     */
+    public String obtenerInformacionProductosOfrecidos() {
+        String infoProductosOfrecidos = "\n";
+
+        for (int i = 0; i < listaProductos.size(); i++) {
+            Producto producto = getListaProductos().get(i);
+            infoProductosOfrecidos += producto.toString();
+        }
+        return infoProductosOfrecidos;
+    }
+
+    // ===================== Gestionar compra producto =====================
+
+    /**
+     * Método que permite crear una instancia de CompraInventario
+     *
+     * @param producto
+     * @param proveedor
+     * @param cantidad
+     */
+    public void crearCompraInventario(Producto producto, Proveedor proveedor, int cantidad) {
+        CompraInventario nuevaCompraInventario = new CompraInventario(producto, this, proveedor, cantidad);
+        listaInventario.add(nuevaCompraInventario);
+    }
+
+    /**
+     * Método que permite realizar la compra de un producto seleccionado a un proveedor
+     *
+     * @param productoComprado
+     * @param cantidad
+     * @return
+     */
+    public boolean comprarProductoProveedor(Producto productoComprado, int cantidad) {
+        Producto producto = obtenerProducto(productoComprado.getCodigo());
+        if (producto == null) {
+            this.crearProducto(productoComprado.getCodigo(), productoComprado.getNombre(),
+                    productoComprado.getClasificacion(), productoComprado.getPrecio(), cantidad, 0);
+        } else {
+            cantidad += producto.getInventario();
+            this.actualizarProducto(producto.getCodigo(), productoComprado.getNombre(), productoComprado.getPrecio(),
+                    cantidad, 0);
+        }
+
+        this.crearCompraInventario(producto, productoComprado.getOwnedByProvedor(), cantidad);
+        return true;
     }
 }
 

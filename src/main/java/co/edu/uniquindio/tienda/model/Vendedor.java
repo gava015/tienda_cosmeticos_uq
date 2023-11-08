@@ -1,7 +1,6 @@
 package co.edu.uniquindio.tienda.model;
 
-public class Vendedor extends Persona{
-
+public class Vendedor extends Persona {
     private int edad;
 
     public Vendedor(String nombre, String apellido, String cedula, int edad) {
@@ -17,12 +16,21 @@ public class Vendedor extends Persona{
         this.edad = edad;
     }
 
+    /**
+     * Método que permite obtener la información del nombre completo
+     *
+     * @return
+     */
+    @Override
+    public String obtenerNombreCompleto() {
+        return nombre + " " + apellido;
+    }
+
     @Override
     public String toString() {
         return "Vendedor{" +
                 "edad=" + edad +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
+                ", nombre='" + obtenerNombreCompleto() + '\'' +
                 ", cedula='" + cedula + '\'' +
                 '}';
     }

@@ -1,7 +1,7 @@
 package co.edu.uniquindio.tienda.model;
 
 public class Producto {
-    private int codigo;
+    private String codigo;
     private String nombre;
     private double precio;
     private int inventario;
@@ -12,14 +12,20 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(String nombre, TipoCosmetico clasificacion, double precio, int inventario, int codigo) {
+    public Producto(String  codigo, String nombre, TipoCosmetico clasificacion, double precio, int inventario,int inventarioVendido) {
+        this.codigo = codigo;
         this.nombre = nombre;
         this.clasificacion = clasificacion;
         this.precio = precio;
         this.inventario = inventario;
+        this.inventarioVendido = inventarioVendido;
+    }
+    public String getCodigo() {
+        return codigo;
+    }
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-
     public String getNombre() {
         return nombre;
     }
@@ -60,14 +66,6 @@ public class Producto {
         this.clasificacion = clasificacion;
     }
 
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
-
     public Proveedor getOwnedByProvedor() {
         return ownedByProveedor;
     }
@@ -76,28 +74,39 @@ public class Producto {
         this.ownedByProveedor = ownedByProvedor;
     }
 
-    /*Metodo para contar la cantidad de productos vendidos
-
-     */
-    public void contarProducto() {
-        this.inventarioVendido += 1;
+    public double calcularTotalInventarioVendido() {
+        double inventarioVendido = this.inventarioVendido * this.precio;
+        return inventarioVendido;
     }
 
-    public double totalProductoVendido() {
-        double calcularTotalInventarioVendido = this.inventarioVendido * this.precio;
-        return calcularTotalInventarioVendido;
+    public int obtenerInventarioDisponible(){
+        int inventario = this.getInventario() - this.getInventarioVendido();
+        if(inventario < 0){
+            inventario = 0;
+        }
+        return inventario;
+    }
+
+    public void modificarTipoClasificacion(String tipoClasificacion){
+        switch (tipoClasificacion){
+            case "1":
+               setClasificacion(TipoCosmetico.MAQUILLAJE);
+                break;
+            case "2":
+                setClasificacion(TipoCosmetico.CUIDADO_PIEL);
+                break;
+            case "3":
+                setClasificacion(TipoCosmetico.CABELLO);
+                break;
+            case "4":
+                setClasificacion(TipoCosmetico.UÑAS);
+                break;
+        }
     }
 
     @Override
     public String toString() {
-        return "Producto{" +
-                "nombre='" + nombre + '\'' +
-                ", precio=" + precio +
-                ", clasificacion=" + clasificacion +
-                ", inventario=" + inventario +
-                ", inventarioVendido=" + inventarioVendido +
-                ", codigo=" + codigo +
-                '}';
+        return "Código: " + codigo + "; Precio: " + precio + "; Producto: " + nombre + "["+ obtenerInventarioDisponible() +"]\n" ;
     }
 }
 

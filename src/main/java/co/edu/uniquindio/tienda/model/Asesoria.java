@@ -1,26 +1,30 @@
 package co.edu.uniquindio.tienda.model;
 
-import java.util.List;
-
 public class Asesoria {
-    private int codigo;
-    private String fechaAsesoria;
+    private String codigo;
+    private String fecha;
     private Vendedor vendedor;
     private Cliente cliente;
-    private  List<Producto> Productos;
+    private Producto Producto;
     private TipoCosmetico tipoAsesoria;
-
     private Tienda ownedByTienda;
 
     public Asesoria() {
     }
 
-    public Asesoria(TipoCosmetico tipoAsesoria, String fechaAsesoria, Vendedor vendedor, Cliente cliente, int codigo) {
-        this.tipoAsesoria = tipoAsesoria;
-        this.fechaAsesoria = fechaAsesoria;
-        this.cliente = cliente;
-        this.vendedor = vendedor;
+    public Asesoria(String codigo, String fechaAsesoria, TipoCosmetico tipoAsesoria, Vendedor vendedor, Cliente cliente) {
         this.codigo = codigo;
+        this.fecha = fechaAsesoria;
+        this.vendedor = vendedor;
+        this.cliente = cliente;
+        this.tipoAsesoria = tipoAsesoria;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    public String getCodigo() {
+        return codigo;
     }
 
     public TipoCosmetico getTipoAsesoria() {
@@ -31,12 +35,12 @@ public class Asesoria {
         this.tipoAsesoria = tipoAsesoria;
     }
 
-    public String getFechaAsesoria() {
-        return fechaAsesoria;
+    public String getFecha() {
+        return fecha;
     }
 
-    public void setFechaAsesoria(String fechaAsesoria) {
-        this.fechaAsesoria = fechaAsesoria;
+    public void setFecha(String fechaAsesoria) {
+        this.fecha = fechaAsesoria;
     }
 
     public Vendedor getVendedor() {
@@ -55,22 +59,13 @@ public class Asesoria {
         this.cliente = cliente;
     }
 
-    public int getCodigo() {
-        return codigo;
+    public Producto getProducto() {
+        return Producto;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setProducto(co.edu.uniquindio.tienda.model.Producto producto) {
+        Producto = producto;
     }
-
-    public List<Producto> getProductos() {
-        return Productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        Productos = productos;
-    }
-
     public Tienda getOwnedByTienda() {
         return ownedByTienda;
     }
@@ -79,20 +74,32 @@ public class Asesoria {
         this.ownedByTienda = ownedByTienda;
     }
 
+    public void crearTipoAsesoria(String tipoAsesoria){
+        switch (tipoAsesoria){
+            case "1":
+                setTipoAsesoria(TipoCosmetico.MAQUILLAJE);
+                break;
+            case "2":
+                setTipoAsesoria(TipoCosmetico.CUIDADO_PIEL);
+                break;
+            case "3":
+                setTipoAsesoria(TipoCosmetico.CABELLO);
+                break;
+            case "4":
+                setTipoAsesoria(TipoCosmetico.UÑAS);
+                break;
+        }
+    }
+
     @Override
     public String toString() {
-        String mensaje = "Asesoria{" +
-                "tipoAsesoria='" + tipoAsesoria + '\'' +
-                ", fechaAsesoria='" + fechaAsesoria + '\'' +
-                ", vendedor=" + vendedor +
-                ", cliente=" + cliente +
+        return "Asesoria{" +
+                "codigo=" + codigo +
+                ", fechaAsesoria='" + fecha + '\'' +
+                ", vendedor=" + vendedor.getCedula()+" - "+vendedor.getNombre() +
+                ", cliente=" + cliente.getCedula() + " - " +cliente.getNombre() +
+                ", Producto=" + Producto +
+                ", tipoAsesoria=" + tipoAsesoria +
                 '}';
-
-        for (int i = 0; i < getProductos().size(); i++){
-            Producto producto = getProductos().get(i);
-            mensaje += "Productos{"+ producto.toString();
-        }
-
-        return mensaje;
     }
 }
